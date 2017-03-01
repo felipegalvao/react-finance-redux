@@ -14,9 +14,11 @@ class FinanceApp extends React.Component {
     super(props);
     this.state = {
       items: [],      
-      searchItemText: '',
-      filterDateFrom: null,
-      filterDateTo: null,
+      filterItemText: '',
+      filterDates: {
+        dateFrom: null,
+        dateTo: null
+      },
       auth: {}
     };
 
@@ -81,22 +83,26 @@ class FinanceApp extends React.Component {
     }     
   }
 
-  handleFilterByText (searchItemText) {
+  handleFilterByText (filterItemText) {
     this.setState({
-      searchItemText
+      filterItemText
     })
   }
 
   handleFilterByDate (dateFrom, dateTo) {
     if (isNaN(dateFrom) || isNaN(dateTo)) {
       this.setState({
-        filterDateFrom: null,
-        filterDateTo: null
+        filterDates: {
+          dateFrom: null,
+          dateTo: null
+        }        
       })
     } else {
       this.setState({
-        filterDateFrom: dateFrom,
-        filterDateTo: dateTo
+        filterDates: {
+          dateFrom: dateFrom,
+          dateTo: dateTo
+        }        
       })
     }    
   }
@@ -174,25 +180,25 @@ class FinanceApp extends React.Component {
   }
 
   render() {
-    var {items, searchItemText, filterDateFrom, filterDateTo} = this.state;
+    var {items, filterItemText, filterDates} = this.state;
 
     // Filter Items By Text
-    if (searchItemText === '') {
+    if (filterItemText === '') {
       var filteredItems = items;
     } else {
       var filteredItems = items.filter((item) => {
         var itemDescription = item.itemDescription.toLowerCase();
-        return searchItemText.length === 0 || itemDescription.indexOf(searchItemText.toLowerCase()) > -1;        
+        return filterItemText.length === 0 || itemDescription.indexOf(filterItemText.toLowerCase()) > -1;        
       })
     }
 
     // Filter Items By Date
-    if (filterDateFrom === null && filterDateTo === null) {
+    if (filterDates.dateFrom === null && filterDates.dateTo === null) {
       var filteredItems = filteredItems;
     } else {
       var filteredItems = filteredItems.filter((item) => {
         var itemDate = item.itemDate;
-        return itemDate >= filterDateFrom && itemDate <= filterDateTo;
+        return itemDate >= filterDates.dateFrom && itemDate <= filterDates.dateTo;
       })
     }
 

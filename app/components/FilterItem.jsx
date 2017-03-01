@@ -25,8 +25,8 @@ class FilterItem extends Component {
   }
 
   handleFilterByText () {
-    var searchItemText = this.refs.searchItemText.value;
-    this.props.onFilterByText(searchItemText);
+    var filterItemText = this.refs.filterItemText.value;
+    this.props.onFilterByText(filterItemText);
   }
 
   handleFilterLastDays (days) {
@@ -71,7 +71,7 @@ class FilterItem extends Component {
             <div className="row">
               <div className="medium-6 large-6 columns">
                 <p>Filter by text:</p>
-                <input type="text" ref="searchItemText" placeholder="Filter incomes and expenses" onChange={this.handleFilterByText} />
+                <input type="text" ref="filterItemText" placeholder="Filter incomes and expenses" onChange={this.handleFilterByText} />
               </div>          
             </div>
             <div className="row">          

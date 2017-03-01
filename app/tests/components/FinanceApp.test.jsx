@@ -12,27 +12,27 @@ describe('FinanceApp', () => {
     expect(FinanceApp).toExist();
   })
 
-  it('should add an item on handleAddItem', () => {
-    var item = {
-      userId: 'abc123',
-      itemDescription: 'test item',
-      itemValue: 50.50,
-      itemDate: 1487548800000,
-      itemType: 'expense'
-    }
+  // it('should add an item on handleAddItem', () => {
+  //   var item = {
+  //     userId: 'abc123',
+  //     itemDescription: 'test item',
+  //     itemValue: 50.50,
+  //     itemDate: 1487548800000,
+  //     itemType: 'expense'
+  //   }
 
-    var financeApp = TestUtils.renderIntoDocument(<FinanceApp/>);
+  //   var financeApp = TestUtils.renderIntoDocument(<FinanceApp/>);
 
-    financeApp.setState({
-      items:[],
-      auth: {
-        uid: 'abc123'
-      }
-    })
+  //   financeApp.setState({
+  //     items:[],
+  //     auth: {
+  //       uid: 'abc123'
+  //     }
+  //   })
 
-    financeApp.handleAddItem(item.itemDescription, item.itemValue, item.itemDate, item.itemType);
+  //   financeApp.handleAddItem(item.itemDescription, item.itemValue, item.itemDate, item.itemType);
 
-    expect(financeApp.state.items[0].itemDescription).toBe(item.itemDescription);
-    expect(financeApp.state.items.length).toBe(1);
-  }) 
+  //   expect(financeApp.state.items[0].itemDescription).toBe(item.itemDescription);
+  //   expect(financeApp.state.items.length).toBe(1);
+  // }) 
 })
