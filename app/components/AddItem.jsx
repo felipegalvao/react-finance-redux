@@ -31,8 +31,7 @@ class AddItem extends React.Component{
         itemValue: itemValue,
         itemDate: itemDate,
         itemType: itemType
-      };
-      // this.props.onAddItem(itemDescription, itemValue, itemDate, itemType);
+      };      
       dispatch(actions.startAddItem(item));
       this.refs.itemDescription.focus();
     }    

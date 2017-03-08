@@ -23,56 +23,12 @@ class FinanceApp extends React.Component {
       },
       auth: {}
     };
-
-    this.handleAddItem = this.handleAddItem.bind(this);
+    
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFilterByText = this.handleFilterByText.bind(this);
     this.handleFilterByDate = this.handleFilterByDate.bind(this);    
     this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  componentWillMount() {
-    var {dispatch} = this.props;
-
-    var that = this;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        dispatch(actions.login(user.uid));
-        
-        var itemsRef = firebase.database().ref('users/' + user.uid + '/items').on('value', function(snapshot) {
-          var items = snapshot.val() || {};
-          var listItems = [];
-
-          Object.keys(items).forEach((itemId) => {
-            listItems.push({
-              id: itemId,
-              ...items[itemId]
-            });
-          })          
-
-          that.setState({
-            items: listItems
-          });
-        });
-      } else {        
-        dispatch(actions.logout());
-      }
-    });    
-  }
-
-  handleAddItem (itemDescription, itemValue, itemDate, itemType) {        
-    var item = {      
-      userId: this.state.auth.uid,
-      itemDescription: itemDescription,
-      itemValue: itemValue,
-      itemDate: itemDate,
-      itemType: itemType
-    }    
-
-    var uid = this.state.auth.uid;
-    var firebaseRef = firebase.database().ref();
-    var itemsRef = firebaseRef.child('users/' + uid + '/items').push(item);
-  }
+  }  
 
   handleDelete (id, itemDescription) {
     var confirmation = confirm('Are you sure you want to delete "' + itemDescription + '"?');
@@ -110,25 +66,11 @@ class FinanceApp extends React.Component {
     var {dispatch} = this.props;
     e.preventDefault();
 
-    dispatch(actions.startLogout());
-
-    // console.log('starting logout');
-    // var that = this;
-    // var uid = this.state.auth.uid;    
-    // firebase.database().ref('users/' + uid + '/items').off();
-    // firebase.auth().signOut().then(function() {
-    //   console.log('logout successful');      
-    //   that.setState({
-    //     items: [],
-    //     auth: {}        
-    //   });      
-    // }, function(error) {
-    //   // An error happened.
-    // });
+    dispatch(actions.startLogout());    
   }
 
   render() {
-    var {items, filterItemText, filterDates} = this.state;
+    var {items, filterItemText, filterDates, auth} = this.props;
 
     // Filter Items By Text
     if (filterItemText === '') {
@@ -171,11 +113,11 @@ class FinanceApp extends React.Component {
     }
 
     var renderApp = () => {      
-      if (firebase.auth().currentUser) {
+      if (Object.keys(auth).length > 0 && auth.constructor === Object) {
         return (
           <div>
             <div className="row row-add-item box-material">
-              <AddItem onAddItem={this.handleAddItem}/>              
+              <AddItem/>              
             </div>
             <div className="row row-filter box-material">              
               <FilterItem onFilterByText={this.handleFilterByText} onFilterByDate={this.handleFilterByDate} />              
@@ -201,7 +143,7 @@ class FinanceApp extends React.Component {
     }
 
     var renderLogout = () => {
-      if (firebase.auth().currentUser) {
+      if (Object.keys(auth).length > 0 && auth.constructor === Object) {
         return <a className="p-logout" onClick={this.handleLogout}>Logout</a>
       }
     } 
@@ -216,4 +158,8 @@ class FinanceApp extends React.Component {
   }
 }
 
-export default Redux.connect()(FinanceApp);
+export default Redux.connect(
+  (state) => {
+    return state;
+  }
+)(FinanceApp);

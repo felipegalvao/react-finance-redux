@@ -18,19 +18,20 @@ export var setFilterItemDates = (filterDateFrom, filterDateTo) => {
 
 export var startAddItem = (item) => {
     return (dispatch, getState) => {
-        var item = {
+        var itemToAdd = {
             userId: getState().auth.uid,
             itemDescription: item.itemDescription,
             itemValue: item.itemValue,
             itemDate: item.itemDate,
             itemType: item.itemType    
         }
+        var uid = getState().auth.uid;
         var firebaseRef = firebase.database().ref();
-        var itemsRef = firebaseRef.child('users/' + uid + '/items').push(item);
+        var itemRef = firebaseRef.child('users/' + uid + '/items').push(itemToAdd);
 
         return itemRef.then(() => {
-            dispatch(addTodo({
-                ...item,
+            dispatch(addItem({
+                ...itemToAdd,
                 id: itemRef.key
             }))
         })
