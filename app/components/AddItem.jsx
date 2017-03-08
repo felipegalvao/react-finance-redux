@@ -1,5 +1,9 @@
 import React from 'react';
 import moment from 'moment';
+var uuid = require('node-uuid');
+var {connect} = require('react-redux');
+
+import * as actions from 'actions';
 
 class AddItem extends React.Component{
   constructor(props) {
@@ -9,19 +13,27 @@ class AddItem extends React.Component{
 
   handleSubmit (e) {
     e.preventDefault();
+    var {dispatch} = this.props;
     var itemDescription = this.refs.itemDescription.value;
     var itemValue = this.refs.itemValue.value;    
     var itemDate = moment(this.refs.itemDate.valueAsDate).utc().unix();    
     if (itemDescription && itemValue && itemDate) {
       this.refs.itemDescription.value = '';
-      this.refs.itemValue.value = ''
-      this.refs.itemDate.value = ''
+      this.refs.itemValue.value = '';
+      this.refs.itemDate.value = '';
       if (this.refs.expense.checked) {
         var itemType = 'expense';
       } else if (this.refs.income.checked) {
         var itemType = 'income';
       }
-      this.props.onAddItem(itemDescription, itemValue, itemDate, itemType);
+      var item = {        
+        itemDescription: itemDescription,
+        itemValue: itemValue,
+        itemDate: itemDate,
+        itemType: itemType
+      };
+      // this.props.onAddItem(itemDescription, itemValue, itemDate, itemType);
+      dispatch(actions.startAddItem(item));
       this.refs.itemDescription.focus();
     }    
   }
@@ -59,4 +71,4 @@ class AddItem extends React.Component{
   }
 }
 
-export default AddItem;
+export default connect()(AddItem);

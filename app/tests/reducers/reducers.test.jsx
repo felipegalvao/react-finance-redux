@@ -33,4 +33,23 @@ describe('Reducers', () => {
             );
         })
     })
+
+    describe('itemsReducer', () => {
+        it('should add new item', () => {
+            var action = {
+                type: 'ADD_ITEM',
+                item: {
+                    userId: 'abc123',
+                    itemDescription: 'Dog Food',
+                    itemValue: 30.50,
+                    itemDate: 15000111222,
+                    itemType: 'expense'
+                }
+            }
+            var res = reducers.itemsReducer(df([]), df(action));
+
+            expect(res.length).toEqual(1);
+            expect(res[0].itemDescription).toEqual(action.item.itemDescription);
+        })
+    })
 })

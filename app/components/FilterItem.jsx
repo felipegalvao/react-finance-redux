@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import FilterLastDaysButton from 'FilterLastDaysButton';
 import moment from 'moment';
+var {connect} = require('react-redux');
+var actions = require('actions');
 
 class FilterItem extends Component {
   constructor(props) {
-    super(props);
+    super(props);    
 
     this.state = {
       filterVisible: false
@@ -15,9 +17,10 @@ class FilterItem extends Component {
     this.handleFilterLastDays = this.handleFilterLastDays.bind(this);
     this.handleClearFilter = this.handleClearFilter.bind(this);
     this.handleShowHideFilter = this.handleShowHideFilter.bind(this);
-  }
+  }  
 
   handleClearFilter (e) {
+    var {dispatch} = this.props;
     e.preventDefault();
     this.refs.toDateFilter.value = '';
     this.refs.fromDateFilter.value = '';
@@ -25,8 +28,9 @@ class FilterItem extends Component {
   }
 
   handleFilterByText () {
+    var {dispatch} = this.props;
     var filterItemText = this.refs.filterItemText.value;
-    this.props.onFilterByText(filterItemText);
+    dispatch(actions.setFilterItemText(filterItemText));    
   }
 
   handleFilterLastDays (days) {
@@ -35,10 +39,11 @@ class FilterItem extends Component {
   }
 
   handleFilterByDate (e) {
-    e.preventDefault();    
-    var dateFrom = moment(this.refs.fromDateFilter.valueAsDate).unix();    
-    var dateTo = moment(this.refs.toDateFilter.valueAsDate).unix();    
-    this.props.onFilterByDate(dateFrom, dateTo);
+    var {dispatch} = this.props;
+    e.preventDefault();
+    var dateFrom = moment(this.refs.fromDateFilter.valueAsDate).unix();
+    var dateTo = moment(this.refs.toDateFilter.valueAsDate).unix();
+    dispatch(actions.setFilterItemDates(dateFrom, dateTo));
   }
 
   handleShowHideFilter () {
@@ -48,7 +53,8 @@ class FilterItem extends Component {
   }
   
   render() {
-    var possibleDays = [3, 7, 15, 30];
+    var possibleDays = [3, 7, 15, 30];   
+    var {dispatch, filterItemText, filterDates} = this.props; 
 
     var renderFilterLastDaysButtons = () => {
       return possibleDays.map((day) => {
@@ -71,7 +77,7 @@ class FilterItem extends Component {
             <div className="row">
               <div className="medium-6 large-6 columns">
                 <p>Filter by text:</p>
-                <input type="text" ref="filterItemText" placeholder="Filter incomes and expenses" onChange={this.handleFilterByText} />
+                <input type="text" ref="filterItemText" placeholder="Filter incomes and expenses" value={filterItemText} onChange={this.handleFilterByText} />
               </div>          
             </div>
             <div className="row">          
@@ -84,7 +90,7 @@ class FilterItem extends Component {
                 {renderFilterLastDaysButtons()}
               </div>
               <div className="medium-8 large-8 columns">
-                <form onSubmit={this.handleFilterByDate} ref="formFilterDate">
+                <form ref="formFilterDate" onSubmit={this.handleFilterByDate}>
                   <div className="medium-4 large-4 columns">
                     <p><label htmlFor="id-fromDateFilter">From</label></p>
                     <p><input id="id-fromDateFilter" type="date" ref="fromDateFilter" placeholder="Filter incomes and expenses from" /></p>
@@ -119,4 +125,8 @@ class FilterItem extends Component {
   }
 }
 
-export default FilterItem;
+export default connect(
+  (state) => {
+    return state;
+  }
+)(FilterItem);

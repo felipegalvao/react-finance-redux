@@ -1,4 +1,5 @@
 import React from 'react';
+import * as Redux from 'react-redux';
 
 import moment from 'moment';
 var uuid = require('node-uuid');
@@ -8,6 +9,7 @@ import Balance from 'Balance';
 import FilterItem from 'FilterItem';
 import ItemList from 'ItemList';
 import Login from 'Login';
+import * as actions from 'actions';
 
 class FinanceApp extends React.Component {
   constructor(props) {
@@ -25,22 +27,19 @@ class FinanceApp extends React.Component {
     this.handleAddItem = this.handleAddItem.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFilterByText = this.handleFilterByText.bind(this);
-    this.handleFilterByDate = this.handleFilterByDate.bind(this);
-    this.handleGithubLogin = this.handleGithubLogin.bind(this);
-    this.handleGoogleLogin = this.handleGoogleLogin.bind(this);
-    this.handleAppLogin = this.handleAppLogin.bind(this);
+    this.handleFilterByDate = this.handleFilterByDate.bind(this);    
     this.handleLogout = this.handleLogout.bind(this);
   }
 
   componentWillMount() {
+    var {dispatch} = this.props;
+
     var that = this;
     firebase.auth().onAuthStateChanged(function(user) {
       if (user) {
-        that.handleAppLogin(user.uid);
-
-        var uid = that.state.auth.uid;        
+        dispatch(actions.login(user.uid));
         
-        var itemsRef = firebase.database().ref('users/' + uid + '/items').on('value', function(snapshot) {
+        var itemsRef = firebase.database().ref('users/' + user.uid + '/items').on('value', function(snapshot) {
           var items = snapshot.val() || {};
           var listItems = [];
 
@@ -56,10 +55,10 @@ class FinanceApp extends React.Component {
           });
         });
       } else {        
-        that.handleLogout();
+        dispatch(actions.logout());
       }
     });    
-  }  
+  }
 
   handleAddItem (itemDescription, itemValue, itemDate, itemType) {        
     var item = {      
@@ -105,78 +104,27 @@ class FinanceApp extends React.Component {
         }        
       })
     }    
-  }
+  }  
 
-  handleAppLogin (uid) {
-    this.setState({
-      auth: { uid: uid }
-    });
-  }
+  handleLogout (e) {
+    var {dispatch} = this.props;
+    e.preventDefault();
 
-  handleGoogleLogin () {
-    console.log('starting Google Login');
+    dispatch(actions.startLogout());
 
-    var googleProvider = new firebase.auth.GoogleAuthProvider();    
-
-    firebase.auth().signInWithPopup(googleProvider).then(function(result) {
-      if (result.credential) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        var token = result.credential.accessToken;
-        // ...
-      }
-      // The signed-in user info.
-      var user = result.user;
-      console.log('Got user from Google: ', token);
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      // ...
-    });
-  }
-
-  handleGithubLogin () {
-    console.log('starting Github Login');
-
-    var githubProvider = new firebase.auth.GithubAuthProvider();
-
-    firebase.auth().signInWithPopup(githubProvider).then(function(result) {
-      // This gives you a GitHub Access Token. You can use it to access the GitHub API.
-      var token = result.credential.accessToken;
-      // The signed-in user info.
-      var user = result.user;
-      // ...
-    }).catch(function(error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
-      var credential = error.credential;
-      console.log(error)
-      // ...
-    });
-  }
-
-  handleLogout () {
-    console.log('starting logout');
-    var that = this;
-    var uid = this.state.auth.uid;    
-    firebase.database().ref('users/' + uid + '/items').off();    
-    firebase.auth().signOut().then(function() {
-      console.log('logout successful');      
-      that.setState({
-        items: [],
-        auth: {}        
-      });      
-    }, function(error) {
-      // An error happened.
-    });
+    // console.log('starting logout');
+    // var that = this;
+    // var uid = this.state.auth.uid;    
+    // firebase.database().ref('users/' + uid + '/items').off();
+    // firebase.auth().signOut().then(function() {
+    //   console.log('logout successful');      
+    //   that.setState({
+    //     items: [],
+    //     auth: {}        
+    //   });      
+    // }, function(error) {
+    //   // An error happened.
+    // });
   }
 
   render() {
@@ -233,8 +181,8 @@ class FinanceApp extends React.Component {
               <FilterItem onFilterByText={this.handleFilterByText} onFilterByDate={this.handleFilterByDate} />              
             </div>
             <div className="row row-items box-material">              
-              <ItemList items={expenses} title={"Expenses"} totalValue={expenseTotal} onDelete={ this.handleDelete }/>
-              <ItemList items={incomes} title={"Incomes"} totalValue={incomeTotal} onDelete={ this.handleDelete }/>              
+              <ItemList type={"expense"} />
+              <ItemList type={"income"} />
             </div>
             <div className="row row-balance box-material">              
               <Balance expenseTotal={expenseTotal} incomeTotal={incomeTotal} />              
@@ -245,7 +193,7 @@ class FinanceApp extends React.Component {
         return (
           <div className="row">
             <div className="columns small-centered medium-12 large-12">              
-              <Login onGithubLogin={ this.handleGithubLogin } onGoogleLogin={ this.handleGoogleLogin } onLogout={ this.handleLogout }/>
+              <Login onLogout={ this.handleLogout }/>
             </div>
           </div>
         )
@@ -268,4 +216,4 @@ class FinanceApp extends React.Component {
   }
 }
 
-export default FinanceApp;
+export default Redux.connect()(FinanceApp);
