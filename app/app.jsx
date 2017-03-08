@@ -12,7 +12,8 @@ var store = require('configureStore').configure();
 
 firebase.auth().onAuthStateChanged((user) => {
   if (user) {
-    store.dispatch(actions.login(user.uid));    
+    store.dispatch(actions.login(user.uid));
+    store.dispatch(actions.startAddItems());
   } else {
     store.dispatch(actions.logout());    
   }

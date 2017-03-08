@@ -13,16 +13,7 @@ import * as actions from 'actions';
 
 class FinanceApp extends React.Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      items: [],      
-      filterItemText: '',
-      filterDates: {
-        dateFrom: null,
-        dateTo: null
-      },
-      auth: {}
-    };
+    super(props);    
     
     this.handleDelete = this.handleDelete.bind(this);
     this.handleFilterByText = this.handleFilterByText.bind(this);

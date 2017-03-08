@@ -45,6 +45,32 @@ export var addItem = (item) => {
     }
 }
 
+export var startAddItems = () => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        var itemsRef = firebase.database().ref('users/' + uid + '/items').on('value', function(snapshot) {
+            var items = snapshot.val() || {};
+            var listItems = [];
+
+            Object.keys(items).forEach((itemId) => {
+                listItems.push({
+                id: itemId,
+                ...items[itemId]
+                });
+            })
+
+            dispatch(addItems(listItems));
+        });
+    }
+}
+
+export var addItems = (items) => {
+    return {
+        type: 'ADD_ITEMS',
+        items
+    }
+}
+
 export var deleteItem = (id, itemDescription) => {
     return {
         type: 'DELETE_ITEM',

@@ -30,6 +30,11 @@ export var itemsReducer = (state = [], action) => {
             return state.filter((item) => {
                 return item.id !== action.id
             })
+        case 'ADD_ITEMS':
+            return [
+                ...state,
+                ...action.items
+            ]
         case 'LOGOUT':
             return [];
         default:
