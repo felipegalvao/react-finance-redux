@@ -79,6 +79,14 @@ export var deleteItem = (id, itemDescription) => {
     }
 }
 
+export var startDeleteItem = (id, itemDescription) => {
+    return (dispatch, getState) => {
+        var uid = getState().auth.uid;
+        firebase.database().ref('users/' + uid + '/items/' + id).remove();
+        dispatch(deleteItem(id, itemDescription));
+    }
+}
+
 export var login = (uid) => {
     return {
         type: 'LOGIN',

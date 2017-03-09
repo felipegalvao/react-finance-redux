@@ -13,20 +13,11 @@ import * as actions from 'actions';
 
 class FinanceApp extends React.Component {
   constructor(props) {
-    super(props);    
+    super(props);
     
-    this.handleDelete = this.handleDelete.bind(this);
     this.handleFilterByText = this.handleFilterByText.bind(this);
     this.handleFilterByDate = this.handleFilterByDate.bind(this);    
     this.handleLogout = this.handleLogout.bind(this);
-  }  
-
-  handleDelete (id, itemDescription) {
-    var confirmation = confirm('Are you sure you want to delete "' + itemDescription + '"?');
-    if (confirmation) {      
-      var uid = this.state.auth.uid;      
-      firebase.database().ref('users/' + uid + '/items/' + id).remove();
-    }     
   }
 
   handleFilterByText (filterItemText) {
