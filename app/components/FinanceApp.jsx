@@ -13,35 +13,9 @@ import * as actions from 'actions';
 
 class FinanceApp extends React.Component {
   constructor(props) {
-    super(props);
-    
-    this.handleFilterByText = this.handleFilterByText.bind(this);
-    this.handleFilterByDate = this.handleFilterByDate.bind(this);    
+    super(props);    
+        
     this.handleLogout = this.handleLogout.bind(this);
-  }
-
-  handleFilterByText (filterItemText) {
-    this.setState({
-      filterItemText
-    })
-  }
-
-  handleFilterByDate (dateFrom, dateTo) {
-    if (isNaN(dateFrom) || isNaN(dateTo)) {
-      this.setState({
-        filterDates: {
-          dateFrom: null,
-          dateTo: null
-        }        
-      })
-    } else {
-      this.setState({
-        filterDates: {
-          dateFrom: dateFrom,
-          dateTo: dateTo
-        }        
-      })
-    }    
   }  
 
   handleLogout (e) {
@@ -52,47 +26,7 @@ class FinanceApp extends React.Component {
   }
 
   render() {
-    var {items, filterItemText, filterDates, auth} = this.props;
-
-    // Filter Items By Text
-    if (filterItemText === '') {
-      var filteredItems = items;
-    } else {
-      var filteredItems = items.filter((item) => {
-        var itemDescription = item.itemDescription.toLowerCase();
-        return filterItemText.length === 0 || itemDescription.indexOf(filterItemText.toLowerCase()) > -1;        
-      })
-    }
-
-    // Filter Items By Date
-    if (filterDates.dateFrom === null && filterDates.dateTo === null) {
-      var filteredItems = filteredItems;
-    } else {
-      var filteredItems = filteredItems.filter((item) => {
-        var itemDate = item.itemDate;
-        return itemDate >= filterDates.dateFrom && itemDate <= filterDates.dateTo;
-      })
-    }
-
-    var expenses = filteredItems.filter((item) => {
-      return item.itemType === 'expense';
-    })
-
-    var incomes = filteredItems.filter((item) => {
-      return item.itemType === 'income';
-    })
-
-    var expenseTotal = 0;
-    var incomeTotal = 0;
-
-    // Calculate total of expenses and incomes
-    for (var i=0; i < expenses.length; i++) {
-      expenseTotal += Number(expenses[i].itemValue);
-    }
-
-    for (var i=0; i < incomes.length; i++) {
-      incomeTotal += Number(incomes[i].itemValue);
-    }
+    var {items, filterItemText, filterDates, auth} = this.props;    
 
     var renderApp = () => {      
       if (Object.keys(auth).length > 0 && auth.constructor === Object) {
@@ -102,14 +36,14 @@ class FinanceApp extends React.Component {
               <AddItem/>              
             </div>
             <div className="row row-filter box-material">              
-              <FilterItem onFilterByText={this.handleFilterByText} onFilterByDate={this.handleFilterByDate} />              
+              <FilterItem/>
             </div>
             <div className="row row-items box-material">              
               <ItemList type={"expense"} />
               <ItemList type={"income"} />
             </div>
             <div className="row row-balance box-material">              
-              <Balance expenseTotal={expenseTotal} incomeTotal={incomeTotal} />              
+              <Balance/>
             </div>
           </div>
         )

@@ -1,6 +1,7 @@
 import React from 'react';
 import Item from 'Item';
-var {connect} = require('react-redux');
+import * as Redux from 'react-redux';
+import {filterItems} from 'app/utils/';
 
 var NumberFormat = require('react-number-format');
 
@@ -16,34 +17,7 @@ class ItemList extends React.Component{
   render() {
     var {items, filterItemText, filterDates, type} = this.props;
 
-    var filterItems = (items) => {
-      // Filter items by Text
-      if (filterItemText === '') {
-        var filteredItems = items;
-      } else {
-        var filteredItems = items.filter((item) => {
-          var itemDescription = item.itemDescription.toLowerCase();
-          return filterItemText.length === 0 || itemDescription.indexOf(filterItemText.toLowerCase()) > -1;        
-        })
-      }
-      
-      // Filter Items By Date
-      if (filterDates.dateFrom && filterDates.dateTo) {
-        var filteredItems = filteredItems.filter((item) => {
-          var itemDate = item.itemDate;
-          return itemDate >= filterDates.dateFrom && itemDate <= filterDates.dateTo;
-        })
-      } else {
-        var filteredItems = filteredItems;        
-      }
-
-      // Filter items by type
-      var filteredItems = filteredItems.filter((item) => {
-        return item.itemType === type;
-      })
-
-      return filteredItems;
-    }
+    var title = type.charAt(0).toUpperCase() + type.slice(1) + 's';    
 
     var calculateTotalValue = (items) => {
       var totalValue = 0;
@@ -59,11 +33,12 @@ class ItemList extends React.Component{
       })
     }
 
-    var filteredItems = filterItems(items, filterItemText, filterDates, type);   
+    var filteredItems = filterItems(items, filterItemText, filterDates, type);
+    // console.log(filterItems);
 
     return (
       <div className="medium-6 large-6 columns">
-        <h4>{type}</h4>
+        <h4>{title}</h4>
         <table className="table-itemlist">
           <thead>
             <tr>
@@ -88,7 +63,7 @@ class ItemList extends React.Component{
   }
 };
 
-export default connect(
+export default Redux.connect(
   (state) => {
     return state;
   }
