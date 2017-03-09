@@ -29,12 +29,12 @@ export var startAddItem = (item) => {
         var firebaseRef = firebase.database().ref();
         var itemRef = firebaseRef.child('users/' + uid + '/items').push(itemToAdd);
 
-        return itemRef.then(() => {
-            dispatch(addItem({
-                ...itemToAdd,
-                id: itemRef.key
-            }))
-        })
+        // return itemRef.then(() => {
+        //     dispatch(addItem({
+        //         ...itemToAdd,
+        //         id: itemRef.key
+        //     }))
+        // })
     }
 }
 
