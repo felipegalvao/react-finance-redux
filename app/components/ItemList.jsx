@@ -5,7 +5,7 @@ import {filterItems} from 'app/utils/';
 
 var NumberFormat = require('react-number-format');
 
-class ItemList extends React.Component{
+export class ItemList extends React.Component{
   constructor(props) {
     super(props);
 

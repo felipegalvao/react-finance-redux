@@ -1,11 +1,13 @@
 import expect from 'expect';
 import React from 'react';
 import ReactDOM from 'react-dom';
+var {Provider} = require('react-redux');
 var TestUtils = require('react-addons-test-utils');
 import $ from 'jquery';
 
-import ItemList from 'ItemList';
-import Item from 'Item';
+import {configure} from 'configureStore';
+import ConnectedItemList, {ItemList} from 'ItemList';
+import ConnectedItem, {Item} from 'Item';
 
 describe('ItemList', () => {
   it('should exist', () => {
@@ -14,25 +16,34 @@ describe('ItemList', () => {
 
   it('should render one Item component for each item', () => {
     var items = [{
-        id: 'abc123',
+        userId: 'abc123',
         itemDescription: 'test item 1',
         itemValue: 50.50,
         itemDate: 1487548800000,
         itemType: 'expense'
       },
       {
-        id: 'def456',
+        userId: 'abc123',
         itemDescription: 'test item 2',
         itemValue: 100,
         itemDate: 1499999900000,
         itemType: 'expense'
       }]
-      var totalValue = items[0].itemValue + items[1].itemValue;
 
-      var itemList = TestUtils.renderIntoDocument(<ItemList items={items} title={"Expenses"} totalValue={totalValue} />);
-      var itemsComponents = TestUtils.scryRenderedComponentsWithType(itemList, Item);
+      var store = configure({
+        items
+      });
 
-      expect(itemsComponents.length).toEqual(items.length);
+      var provider = TestUtils.renderIntoDocument(
+        <Provider store={store}>
+          <ConnectedItemList type={"expense"}/>
+        </Provider>
+      )      
+
+      var itemList = TestUtils.scryRenderedComponentsWithType(provider, ConnectedItemList)[0];
+      var itemComponents = TestUtils.scryRenderedComponentsWithType(itemList, ConnectedItem);   
+
+      expect(itemComponents.length).toEqual(items.length);
   })
 
   it('should render a table with no item rows if no items', () => {

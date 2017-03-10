@@ -20,7 +20,7 @@ describe('Reducers', () => {
     describe('filterDatesReducer', () => {
         it('should set filterDates', () => {
             var action = {
-                type: 'SET_FILTER_DATES',
+                type: 'SET_FILTER_ITEM_DATES',
                 filterDateFrom: 15000000,
                 filterDateTo: 15111111
             };

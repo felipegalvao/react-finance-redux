@@ -15,6 +15,7 @@ module.exports = function (config) {
     },
     reporters: ['mocha'],
     client: {
+      captureConsole: true,
       mocha: {
         timeout: '5000'
       }

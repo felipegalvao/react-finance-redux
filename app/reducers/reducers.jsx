@@ -9,7 +9,7 @@ export var filterTextReducer = (state = '', action) => {
 
 export var filterDatesReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'SET_FILTER_DATES':
+        case 'SET_FILTER_ITEM_DATES':
             return {
                 dateFrom: action.filterDateFrom,
                 dateTo: action.filterDateTo

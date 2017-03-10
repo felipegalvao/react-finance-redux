@@ -5,7 +5,7 @@ var {connect} = require('react-redux');
 
 import * as actions from 'actions';
 
-class AddItem extends React.Component{
+export class AddItem extends React.Component{
   constructor(props) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);

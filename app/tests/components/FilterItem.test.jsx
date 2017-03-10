@@ -5,41 +5,53 @@ import ReactDOM from 'react-dom';
 var TestUtils = require('react-addons-test-utils');
 import $ from 'jquery';
 
-import FilterItem from 'FilterItem';
+import {FilterItem} from 'FilterItem';
+import * as actions from 'actions';
 
 describe('FilterItem', () => {
-  it('FilterItem', () => {
+  it('should exist', () => {
     expect(FilterItem).toExist();
   })
 
-  it('should call onFilterByText when text is inputed', () => {
-    var filterText = 'food';
+  it('should dispatch SET_FILTER_ITEM_TEXT when text is inputed', () => {
+    var filterItemText = 'food';
+    var action = actions.setFilterItemText(filterItemText)
     var spy = expect.createSpy();
-    var filterItem = TestUtils.renderIntoDocument(<FilterItem onFilterByText={spy}/>);
+    var filterItem = TestUtils.renderIntoDocument(<FilterItem dispatch={spy}/>);
     var $el = $(ReactDOM.findDOMNode(filterItem));
     filterItem.setState({filterVisible: true});
 
-    filterItem.refs.filterItemText.value = filterText;
+    filterItem.refs.filterItemText.value = filterItemText;
     TestUtils.Simulate.change(filterItem.refs.filterItemText);
 
-    expect(spy).toHaveBeenCalledWith('food');
+    expect(spy).toHaveBeenCalledWith(action);
   })
 
-  // it('should call onFilterByDate when dates are provided', () => {
-  //   var dateFrom = 1487548800000;
-  //   var dateTo = 1487549900000;    
+  // it('should dispatch SET_FILTER_ITEM_DATES when dates are provided', () => {
+  //   var dateFrom = "2017-03-08";
+  //   var dateTo = "2017-03-10"; 
+  //   var action = actions.setFilterItemDates(moment(dateFrom).unix(), moment(dateTo).unix())   
   //   var spy = expect.createSpy();
-  //   var filterItem = TestUtils.renderIntoDocument(<FilterItem onFilterByDate={spy}/>);
+  //   var filterItem = TestUtils.renderIntoDocument(<FilterItem dispatch={spy}/>);
   //   filterItem.setState({filterVisible: true});
   //   var $el = $(ReactDOM.findDOMNode(filterItem));
-    
-  //   filterItem.refs.fromDateFilter.valueAsNumber = dateFrom;
-  //   filterItem.refs.toDateFilter.valueAsNumber = dateTo;    
-    
-  //   TestUtils.Simulate.submit($el.find('form')[0]);
 
-  //   console.log(spy.calls[0].arguments);
+  //   TestUtils.Simulate.change($el.find('#id-fromDateFilter')[0], {target: {value: dateFrom}});
+  //   TestUtils.Simulate.change($el.find('#id-toDateFilter')[0], {target: {value: dateTo}});
+    
+  //   const fromInput = filterItem.refs.fromDateFilter;
+  //   const toInput = filterItem.refs.toDateFilter;
+  //   fromInput.value = dateFrom;
+  //   toInput.value = dateTo;
+  //   TestUtils.Simulate.change(fromInput);
+  //   TestUtils.Simulate.change(toInput);
+  //   console.info($el.find('#id-fromDateFilter')[0]);
+  //   // filterItem.refs.toDateFilter.valueAsNumber = dateTo;    
+    
+  //   TestUtils.Simulate.submit($el.find('form')[0]);   
 
-  //   expect(spy).toHaveBeenCalledWith(moment(dateFrom).utc().unix(), moment(dateTo).utc().unix());
+  //   console.info(spy.calls[0].arguments);
+
+  //   expect(spy).toHaveBeenCalledWith(action);
   // })
 })

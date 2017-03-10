@@ -5,7 +5,7 @@ var actions = require('actions');
 
 var NumberFormat = require('react-number-format');
 
-class Item extends React.Component{
+export class Item extends React.Component{
   // An item can be an income or an expense
   constructor(props) {
     super(props);

@@ -10,7 +10,7 @@ export var setFilterItemText = (filterItemText) => {
 
 export var setFilterItemDates = (filterDateFrom, filterDateTo) => {
     return {
-        type: 'SET_FILTER_DATES',
+        type: 'SET_FILTER_ITEM_DATES',
         filterDateFrom,
         filterDateTo
     }
@@ -28,13 +28,6 @@ export var startAddItem = (item) => {
         var uid = getState().auth.uid;
         var firebaseRef = firebase.database().ref();
         var itemRef = firebaseRef.child('users/' + uid + '/items').push(itemToAdd);
-
-        // return itemRef.then(() => {
-        //     dispatch(addItem({
-        //         ...itemToAdd,
-        //         id: itemRef.key
-        //     }))
-        // })
     }
 }
 
@@ -94,7 +87,7 @@ export var login = (uid) => {
     };
 };
 
-export var logout = (uid) => {
+export var logout = () => {
     return {
         type: 'LOGOUT'
     }

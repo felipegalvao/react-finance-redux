@@ -15,7 +15,7 @@ describe('Actions', () => {
 
     it('should generate set filter dates action', () => {
         var action = {
-            type: 'SET_FILTER_DATES',
+            type: 'SET_FILTER_ITEM_DATES',
             filterDateFrom: 15000000,
             filterDateTo: 15111000
         };
@@ -40,6 +40,22 @@ describe('Actions', () => {
         expect(res).toEqual(action);
     })
 
+    it('should generate add items action', () => {
+        var action = {
+            type: 'ADD_ITEMS',
+            items: [{
+                userId: 'abc123',
+                itemDescription: 'Dog Food',
+                itemValue: 30.50,
+                itemDate: 15000000,
+                itemType: 'expense'
+            }]
+        };
+        var res = actions.addItems(action.items);
+
+        expect(res).toEqual(action);
+    })
+
     it('should generate delete item action', () => {
         var action = {
             type: 'DELETE_ITEM',
@@ -47,6 +63,25 @@ describe('Actions', () => {
             itemDescription: 'Dog food'
         };
         var res = actions.deleteItem(action.id, action.itemDescription);
+
+        expect(res).toEqual(action);
+    })
+
+    it('should generate login action', () => {
+        var action = {
+            type: 'LOGIN',
+            uid: '123456'
+        };
+        var res = actions.login(action.uid);
+
+        expect(res).toEqual(action);
+    })
+
+    it('should generate logout action', () => {
+        var action = {
+            type: 'LOGOUT'
+        };
+        var res = actions.logout();
 
         expect(res).toEqual(action);
     })

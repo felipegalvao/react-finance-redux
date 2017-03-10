@@ -4,7 +4,7 @@ import moment from 'moment';
 var {connect} = require('react-redux');
 var actions = require('actions');
 
-class FilterItem extends Component {
+export class FilterItem extends Component {
   constructor(props) {
     super(props);    
 
