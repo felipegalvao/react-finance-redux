@@ -1,15 +1,15 @@
-export var filterTextReducer = (state = '', action) => {
+export const filterTextReducer = (state = "", action) => {
     switch (action.type) {
-        case 'SET_FILTER_ITEM_TEXT':
+        case "SET_FILTER_ITEM_TEXT":
             return action.filterItemText;
         default:
             return state;
-    };
-}
+    }
+};
 
-export var filterDatesReducer = (state = {}, action) => {
+export const filterDatesReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'SET_FILTER_ITEM_DATES':
+        case "SET_FILTER_ITEM_DATES":
             return {
                 dateFrom: action.filterDateFrom,
                 dateTo: action.filterDateTo
@@ -17,37 +17,32 @@ export var filterDatesReducer = (state = {}, action) => {
         default:
             return state;
     }
-}
+};
 
-export var itemsReducer = (state = [], action) => {
+export const itemsReducer = (state = [], action) => {
     switch (action.type) {
-        case 'ADD_ITEM':
-            return [
-                ...state,
-                action.item
-            ]
-        case 'DELETE_ITEM':
-            return state.filter((item) => {
-                return item.id !== action.id
-            })
-        case 'ADD_ITEMS':
-            return [                
-                ...action.items
-            ]
-        case 'LOGOUT':
+        case "ADD_ITEM":
+            return [...state, action.item];
+        case "DELETE_ITEM":
+            return state.filter(item => {
+                return item.id !== action.id;
+            });
+        case "ADD_ITEMS":
+            return [...action.items];
+        case "LOGOUT":
             return [];
         default:
             return state;
     }
-}
+};
 
-export var authReducer = (state = {}, action) => {
+export const authReducer = (state = {}, action) => {
     switch (action.type) {
-        case 'LOGIN':
+        case "LOGIN":
             return {
                 uid: action.uid
             };
-        case 'LOGOUT':
+        case "LOGOUT":
             return {};
         default:
             return state;

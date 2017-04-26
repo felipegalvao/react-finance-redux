@@ -1,16 +1,16 @@
-import expect from 'expect';
-import React from 'react';
-import ReactDOM from 'react-dom';
-var TestUtils = require('react-addons-test-utils');
-import $ from 'jquery';
+import expect from "expect";
+import React from "react";
+import ReactDOM from "react-dom";
+const TestUtils = require("react-addons-test-utils");
+import $ from "jquery";
 
-import {Item} from 'Item';
-import * as actions from 'actions';
+import { Item } from "Item";
+import * as actions from "actions";
 
-describe('Item', () => {
-  it('should exist', () => {
+describe("Item", () => {
+  it("should exist", () => {
     expect(Item).toExist();
-  })
+  });
 
   // it('should dispatch DELETE_ITEM with item id and description on delete icon click', () => {
   //   var itemData = {
@@ -26,10 +26,10 @@ describe('Item', () => {
   //   var item = TestUtils.renderIntoDocument(<Item key={itemData.id} {...itemData} dispatch={spy} />)
   //   var $el = $(ReactDOM.findDOMNode(item))
 
-  //   TestUtils.Simulate.click($el.find('i')[0]);    
+  //   TestUtils.Simulate.click($el.find('i')[0]);
 
   //   console.info(spy.calls[0].arguments);
 
   //   expect(spy).toHaveBeenCalledWith(action);
   // })
-})
+});

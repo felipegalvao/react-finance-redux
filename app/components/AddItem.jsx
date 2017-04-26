@@ -1,32 +1,32 @@
 import React from 'react';
 import moment from 'moment';
-var uuid = require('node-uuid');
-var {connect} = require('react-redux');
+const uuid = require('node-uuid');
+const {connect} = require('react-redux');
 
 import * as actions from 'actions';
 
 export class AddItem extends React.Component{
   constructor(props) {
-    super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    super(props);    
   }
 
-  handleSubmit (e) {
+  handleSubmit = (e) => {
     e.preventDefault();
-    var {dispatch} = this.props;
-    var itemDescription = this.refs.itemDescription.value;
-    var itemValue = this.refs.itemValue.value;    
-    var itemDate = moment(this.refs.itemDate.valueAsDate).utc().unix();    
+    const {dispatch} = this.props;
+    const itemDescription = this.refs.itemDescription.value;
+    const itemValue = this.refs.itemValue.value;    
+    const itemDate = moment(this.refs.itemDate.valueAsDate).utc().unix();
+    let itemType;
     if (itemDescription && itemValue && itemDate) {
       this.refs.itemDescription.value = '';
       this.refs.itemValue.value = '';
       this.refs.itemDate.value = '';
       if (this.refs.expense.checked) {
-        var itemType = 'expense';
+        itemType = 'expense';
       } else if (this.refs.income.checked) {
-        var itemType = 'income';
+        itemType = 'income';
       }
-      var item = {        
+      const item = {        
         itemDescription: itemDescription,
         itemValue: itemValue,
         itemDate: itemDate,

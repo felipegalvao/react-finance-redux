@@ -1,91 +1,110 @@
-import React, { Component } from 'react';
-import FilterLastDaysButton from 'FilterLastDaysButton';
-import moment from 'moment';
-var {connect} = require('react-redux');
-var actions = require('actions');
+import React, { Component } from "react";
+import FilterLastDaysButton from "FilterLastDaysButton";
+import moment from "moment";
+const { connect } = require("react-redux");
+const actions = require("actions");
 
 export class FilterItem extends Component {
   constructor(props) {
-    super(props);    
+    super(props);
 
     this.state = {
       filterVisible: false
     };
+  }
 
-    this.handleFilterByText = this.handleFilterByText.bind(this);
-    this.handleFilterByDate = this.handleFilterByDate.bind(this);
-    this.handleFilterLastDays = this.handleFilterLastDays.bind(this);
-    this.handleClearFilter = this.handleClearFilter.bind(this);
-    this.handleShowHideFilter = this.handleShowHideFilter.bind(this);
-  }  
-
-  handleClearFilter (e) {
-    var {dispatch} = this.props;
+  handleClearFilter = e => {
     e.preventDefault();
-    this.refs.toDateFilter.value = '';
-    this.refs.fromDateFilter.value = '';
+    this.refs.toDateFilter.value = "";
+    this.refs.fromDateFilter.value = "";
     this.handleFilterByDate(e);
-  }
+  };
 
-  handleFilterByText () {
-    var {dispatch} = this.props;
-    var filterItemText = this.refs.filterItemText.value;
-    dispatch(actions.setFilterItemText(filterItemText));    
-  }
+  handleFilterByText = () => {
+    const { dispatch } = this.props;
+    const filterItemText = this.refs.filterItemText.value;
+    dispatch(actions.setFilterItemText(filterItemText));
+  };
 
-  handleFilterLastDays (days) {
-    this.refs.toDateFilter.value = moment().format('YYYY-MM-DD');
-    this.refs.fromDateFilter.value = moment().subtract(days-1, 'days').format('YYYY-MM-DD');
-  }
+  handleFilterLastDays = days => {
+    this.refs.toDateFilter.value = moment().format("YYYY-MM-DD");
+    this.refs.fromDateFilter.value = moment()
+      .subtract(days - 1, "days")
+      .format("YYYY-MM-DD");
+  };
 
-  handleFilterByDate (e) {
-    var {dispatch} = this.props;
+  handleFilterByDate = e => {
+    const { dispatch } = this.props;
     e.preventDefault();
-    var dateFrom = moment(this.refs.fromDateFilter.valueAsDate).unix();
-    var dateTo = moment(this.refs.toDateFilter.valueAsDate).unix();
+    const dateFrom = moment(this.refs.fromDateFilter.valueAsDate).unix();
+    const dateTo = moment(this.refs.toDateFilter.valueAsDate).unix();
     dispatch(actions.setFilterItemDates(dateFrom, dateTo));
-  }
+  };
 
-  handleShowHideFilter () {
+  handleShowHideFilter = () => {
     this.setState({
       filterVisible: !this.state.filterVisible
     });
-  }
-  
+  };
+
   render() {
-    var possibleDays = [3, 7, 15, 30];   
-    var {dispatch, filterItemText, filterDates} = this.props; 
+    const possibleDays = [3, 7, 15, 30];
+    const { dispatch, filterItemText, filterDates } = this.props;
 
-    var renderFilterLastDaysButtons = () => {
-      return possibleDays.map((day) => {
-        return <FilterLastDaysButton days={day} onFilterLastDays={this.handleFilterLastDays} key={day} />
-      })
-    }
+    const renderFilterLastDaysButtons = () => {
+      return possibleDays.map(day => {
+        return (
+          <FilterLastDaysButton
+            days={day}
+            onFilterLastDays={this.handleFilterLastDays}
+            key={day}
+          />
+        );
+      });
+    };
 
-    var renderShowHideFilterButton = () => {
+    const renderShowHideFilterButton = () => {
       if (this.state.filterVisible) {
-        return (<i className="fa fa-minus-square-o icon-hide-show-filter" aria-hidden="true" onClick={this.handleShowHideFilter}></i>)
+        return (
+          <i
+            className="fa fa-minus-square-o icon-hide-show-filter"
+            aria-hidden="true"
+            onClick={this.handleShowHideFilter}
+          />
+        );
       } else {
-        return (<i className="fa fa-plus-square-o icon-hide-show-filter" aria-hidden="true" onClick={this.handleShowHideFilter}></i>)
+        return (
+          <i
+            className="fa fa-plus-square-o icon-hide-show-filter"
+            aria-hidden="true"
+            onClick={this.handleShowHideFilter}
+          />
+        );
       }
-    }
+    };
 
-    var renderFilter = () => {
+    const renderFilter = () => {
       if (this.state.filterVisible) {
         return (
           <div id="wrapper-filter-box">
             <div className="row">
               <div className="medium-6 large-6 columns">
                 <p>Filter by text:</p>
-                <input type="text" ref="filterItemText" placeholder="Filter incomes and expenses" value={filterItemText} onChange={this.handleFilterByText} />
-              </div>          
+                <input
+                  type="text"
+                  ref="filterItemText"
+                  placeholder="Filter incomes and expenses"
+                  value={filterItemText}
+                  onChange={this.handleFilterByText}
+                />
+              </div>
             </div>
-            <div className="row">          
+            <div className="row">
               <div className="medium-12 large-12 columns">
                 <p>Dates</p>
               </div>
 
-              <div className="medium-4 large-4 columns column-filter-last-days">            
+              <div className="medium-4 large-4 columns column-filter-last-days">
                 <p>Filter the last:</p>
                 {renderFilterLastDaysButtons()}
               </div>
@@ -93,29 +112,52 @@ export class FilterItem extends Component {
                 <form ref="formFilterDate" onSubmit={this.handleFilterByDate}>
                   <div className="medium-4 large-4 columns">
                     <p><label htmlFor="id-fromDateFilter">From</label></p>
-                    <p><input id="id-fromDateFilter" type="date" ref="fromDateFilter" placeholder="Filter incomes and expenses from" /></p>
+                    <p>
+                      <input
+                        id="id-fromDateFilter"
+                        type="date"
+                        ref="fromDateFilter"
+                        placeholder="Filter incomes and expenses from"
+                      />
+                    </p>
                   </div>
-                  
+
                   <div className="medium-4 large-4 columns">
                     <p><label htmlFor="id-toDateFilter">To</label></p>
-                    <p><input id="id-toDateFilter" type="date" ref="toDateFilter" placeholder="Filter incomes and expenses to" /></p>
+                    <p>
+                      <input
+                        id="id-toDateFilter"
+                        type="date"
+                        ref="toDateFilter"
+                        placeholder="Filter incomes and expenses to"
+                      />
+                    </p>
                   </div>
 
-                  <div className="medium-2 large-2 columns">                
-                    <input type="submit" className="button button-apply-filter" value="Filter" />
+                  <div className="medium-2 large-2 columns">
+                    <input
+                      type="submit"
+                      className="button button-apply-filter"
+                      value="Filter"
+                    />
                   </div>
 
-                  <div className="medium-2 large-2 columns">                
-                    <button className="button button-clear-filter" onClick={this.handleClearFilter}>Clear</button>
+                  <div className="medium-2 large-2 columns">
+                    <button
+                      className="button button-clear-filter"
+                      onClick={this.handleClearFilter}
+                    >
+                      Clear
+                    </button>
                   </div>
-                </form>   
-              </div>       
+                </form>
+              </div>
             </div>
           </div>
-        )
+        );
       }
-    }
-    
+    };
+
     return (
       <div className="medium-12 large-12 columns">
         <h4>Filter {renderShowHideFilterButton()}</h4>
@@ -125,8 +167,6 @@ export class FilterItem extends Component {
   }
 }
 
-export default connect(
-  (state) => {
-    return state;
-  }
-)(FilterItem);
+export default connect(state => {
+  return state;
+})(FilterItem);
