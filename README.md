@@ -10,7 +10,7 @@ filter items by date or text and clear the filters. You can also delete
 expenses and incomes. Authentication and persistence of expenses and incomes
 is handled with Firebase.
 
-Tests with Karma and Expect.
+Tests with Karma and Expect can be run with "npm test".
 
 I also built the same app built without Redux, in the following URL: https://github.com/felipegalvao/react-finance-redux
 
